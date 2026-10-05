@@ -16,6 +16,7 @@ const fallbackGroups = [
 
 let scoreRows = fallbackGroups.map(([group, product]) => [group, product, "", "", "", ""]);
 let photoRows = Array(6).fill("");
+let commentRows = [];
 
 function text(value) {
   return value === null || value === undefined || value === "" ? "—" : String(value);
@@ -81,7 +82,33 @@ function render() {
       scores.appendChild(box);
     });
 
-    info.append(nameRow, product, scores);
+    const comments = document.createElement("div");
+    comments.className = "comments";
+    const commentTitle = document.createElement("div");
+    commentTitle.className = "comment-title";
+    commentTitle.textContent = "Nhận xét";
+    comments.appendChild(commentTitle);
+
+    const groupComments = commentRows.filter(item => item[1] === row[0] && item[4]);
+    if (groupComments.length) {
+      groupComments.slice(-3).reverse().forEach(item => {
+        const comment = document.createElement("div");
+        comment.className = "comment-item";
+        const who = document.createElement("b");
+        who.textContent = `${item[0]} · ${item[2]}`;
+        const content = document.createElement("span");
+        content.textContent = item[4];
+        comment.append(who, content);
+        comments.appendChild(comment);
+      });
+    } else {
+      const emptyComment = document.createElement("div");
+      emptyComment.className = "comment-empty";
+      emptyComment.textContent = "Chưa có nhận xét";
+      comments.appendChild(emptyComment);
+    }
+
+    info.append(nameRow, product, scores, comments);
     card.append(photoBox, info);
     grid.appendChild(card);
   });
@@ -104,13 +131,24 @@ window.handlePhotos = response => {
   render();
 };
 
+window.handleComments = response => {
+  commentRows = rowsFromGoogle(response);
+  render();
+};
+
 function loadJsonp(sheet, range, callback) {
   const old = document.querySelector(`script[data-callback="${callback}"]`);
   if (old) old.remove();
   const script = document.createElement("script");
   script.dataset.callback = callback;
   script.onerror = () => setStatus("Chưa đọc được bảng dữ liệu", "error");
-  const query = new URLSearchParams({ tqx: `responseHandler:${callback}`, sheet, range, _: Date.now() });
+  const query = new URLSearchParams({
+    tqx: `responseHandler:${callback}`,
+    sheet,
+    range,
+    headers: "0",
+    _: Date.now()
+  });
   script.src = `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?${query}`;
   document.body.appendChild(script);
 }
@@ -119,6 +157,7 @@ function refreshData() {
   setStatus("Đang cập nhật…", "");
   loadJsonp("Tổng hợp", "A5:F10", "handleSummary");
   loadJsonp("Ảnh sản phẩm", "D2:D7", "handlePhotos");
+  loadJsonp("Dữ liệu chấm", "B2:F1000", "handleComments");
 }
 
 function setStatus(message, state) {

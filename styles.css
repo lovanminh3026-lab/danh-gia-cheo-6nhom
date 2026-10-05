@@ -12,6 +12,8 @@
 
 * { box-sizing: border-box; }
 
+html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+
 body {
   margin: 0;
   color: var(--ink);
@@ -34,6 +36,7 @@ button { font: inherit; }
   border-bottom: 1px solid var(--line);
   box-shadow: 0 8px 28px rgba(33, 73, 108, .08);
   backdrop-filter: blur(10px);
+  max-width: 100%;
 }
 
 .eyebrow {
@@ -61,7 +64,7 @@ h1 { margin: 0; font-size: clamp(25px, 3vw, 38px); line-height: 1.12; }
 .upload { background: var(--green); }
 .score { background: var(--blue); }
 
-main { max-width: 1680px; margin: auto; padding: 18px; }
+main { width: 100%; max-width: 1500px; margin: auto; padding: 18px; }
 .summary-bar {
   display: flex;
   flex-wrap: wrap;
@@ -82,8 +85,9 @@ main { max-width: 1680px; margin: auto; padding: 18px; }
 .sync.ok { color: #16805b; }
 .sync.error { color: #b6472b; }
 
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .card {
+  min-width: 0;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 17px;
@@ -91,7 +95,8 @@ main { max-width: 1680px; margin: auto; padding: 18px; }
   box-shadow: 0 8px 24px rgba(38, 79, 111, .1);
 }
 .photo-box {
-  height: clamp(210px, 23vw, 330px);
+  width: 100%;
+  aspect-ratio: 16 / 9;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,6 +114,11 @@ main { max-width: 1680px; margin: auto; padding: 18px; }
 .scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
 .score-box { padding: 9px 5px; border-radius: 9px; background: var(--soft); text-align: center; font-size: 14px; }
 .score-box b { display: block; margin-top: 4px; font-size: 18px; }
+.comments { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.comment-title { margin-bottom: 7px; color: var(--ink); font-size: 14px; font-weight: 800; }
+.comment-item { display: grid; gap: 3px; margin-top: 6px; padding: 8px 10px; border-radius: 9px; background: #fff9e9; color: #495c6d; font-size: 13px; line-height: 1.35; overflow-wrap: anywhere; }
+.comment-item b { color: #a65819; font-size: 12px; }
+.comment-empty { padding: 8px 10px; border-radius: 9px; background: #f5f8fb; color: var(--muted); font-size: 13px; font-style: italic; }
 
 .modal {
   position: fixed;
@@ -129,12 +139,18 @@ main { max-width: 1680px; margin: auto; padding: 18px; }
 .image-modal img { max-width: 96vw; max-height: 92vh; object-fit: contain; }
 .image-close { position: absolute; top: 14px; right: 20px; color: #fff; font-size: 44px; }
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
   .hero { position: static; align-items: flex-start; flex-direction: column; padding: 16px; }
   .actions { width: 100%; }
   .action { flex: 1; }
   main { padding: 12px; }
   .summary-bar .sync { width: 100%; margin-left: 0; }
   .grid { grid-template-columns: 1fr; }
-  .photo-box { height: 250px; }
+  .photo-box { min-height: 210px; }
+  .scores { gap: 5px; }
+  .score-box { padding-inline: 3px; font-size: 12px; }
 }
