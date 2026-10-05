@@ -1,0 +1,50 @@
+HƯỚNG DẪN ĐƯA WEB ĐÁNH GIÁ CHÉO LÊN GITHUB
+
+A. TẢI MÃ NGUỒN
+- Giải nén gói danh-gia-cheo-web.zip.
+- Giữ nguyên 5 tệp ở cùng một thư mục:
+  1. index.html
+  2. styles.css
+  3. app.js
+  4. README.md
+  5. .nojekyll
+
+B. TẠO KHO GITHUB
+1. Vào https://github.com/new
+2. Repository name: danh-gia-cheo-6-nhom
+3. Chọn Public.
+4. Bấm Create repository.
+
+C. TẢI TỆP LÊN
+1. Trong kho vừa tạo, bấm “uploading an existing file”.
+2. Kéo đồng thời cả 5 tệp ở mục A vào khung tải lên.
+3. Chờ thấy đủ tên 5 tệp.
+4. Bấm Commit changes.
+
+D. BẬT TRANG WEB
+1. Mở Settings của kho.
+2. Ở cột trái chọn Pages.
+3. Source chọn Deploy from a branch.
+4. Branch chọn main; thư mục chọn / (root).
+5. Bấm Save.
+6. Chờ khoảng 2–10 phút, tải lại trang Settings > Pages.
+7. Khi xuất hiện dòng “Your site is live at…”, bấm Visit site.
+
+Địa chỉ thường có dạng:
+https://TEN-GITHUB.github.io/danh-gia-cheo-6-nhom/
+
+E. LƯU Ý QUAN TRỌNG
+- Không đổi tên index.html.
+- Không để 5 tệp trong thư mục con khi tải lên GitHub.
+- Google Sheet phải cho phép người xem đọc được dữ liệu.
+- Ảnh trên Google Drive cũng phải được cấp quyền xem bằng liên kết.
+- Học sinh cần đăng nhập tài khoản Google khi gửi ảnh vì Google Forms yêu cầu tải tệp.
+- Nếu web báo 404 ngay sau khi bật Pages, đợi vài phút rồi tải lại; xem tab Actions để biết quá trình triển khai đã hoàn tất hay chưa.
+
+F. THAY LINK SAU NÀY
+Mở app.js và sửa ba dòng đầu trong CONFIG:
+- sheetId: mã Google Sheet.
+- scoreForm: liên kết Google Form chấm điểm.
+- photoForm: liên kết Google Form gửi ảnh.
+
+Không xóa phần ?embedded=true ở cuối hai liên kết Google Form.

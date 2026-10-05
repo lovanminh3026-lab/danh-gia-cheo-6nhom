@@ -1,0 +1,140 @@
+:root {
+  --ink: #18324a;
+  --muted: #63788b;
+  --line: #dfeaf3;
+  --blue: #1477d4;
+  --green: #0b907e;
+  --orange: #de572b;
+  --surface: #ffffff;
+  --soft: #eef5fb;
+  font-family: Arial, "Be Vietnam Pro", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: linear-gradient(180deg, #f9fcff 0, #edf5fb 100%);
+  min-height: 100vh;
+}
+
+button { font: inherit; }
+
+.hero {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px clamp(18px, 4vw, 54px);
+  background: rgba(255, 255, 255, .96);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 8px 28px rgba(33, 73, 108, .08);
+  backdrop-filter: blur(10px);
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+h1 { margin: 0; font-size: clamp(25px, 3vw, 38px); line-height: 1.12; }
+.subtitle { margin: 7px 0 0; color: var(--muted); }
+
+.actions { display: flex; gap: 10px; flex-shrink: 0; }
+.action {
+  border: 0;
+  border-radius: 12px;
+  color: #fff;
+  padding: 13px 20px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 7px 18px rgba(25, 82, 130, .16);
+}
+.action:hover { transform: translateY(-1px); }
+.upload { background: var(--green); }
+.score { background: var(--blue); }
+
+main { max-width: 1680px; margin: auto; padding: 18px; }
+.summary-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.summary-bar span {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .82);
+  color: var(--muted);
+  font-size: 14px;
+}
+.summary-bar b { color: var(--ink); }
+.summary-bar .sync { margin-left: auto; }
+.sync.ok { color: #16805b; }
+.sync.error { color: #b6472b; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(38, 79, 111, .1);
+}
+.photo-box {
+  height: clamp(210px, 23vw, 330px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8f0f7;
+  color: #7c91a1;
+  cursor: zoom-in;
+}
+.photo-box img { width: 100%; height: 100%; object-fit: contain; }
+.empty { font-weight: 800; letter-spacing: .03em; }
+.info { padding: 14px 16px 15px; }
+.name-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.name-row h2 { margin: 0; font-size: 24px; }
+.total { color: var(--orange); font-size: 27px; font-weight: 900; }
+.product { margin: 6px 0 11px; color: var(--muted); }
+.scores { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.score-box { padding: 9px 5px; border-radius: 9px; background: var(--soft); text-align: center; font-size: 14px; }
+.score-box b { display: block; margin-top: 4px; font-size: 18px; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(11, 27, 41, .75);
+}
+.modal.open { display: flex; }
+.modal-panel { width: min(920px, 100%); height: min(92vh, 960px); background: #fff; border-radius: 16px; overflow: hidden; }
+.modal-head { height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px 0 19px; border-bottom: 1px solid var(--line); }
+.close { border: 0; background: transparent; color: var(--ink); font-size: 36px; line-height: 1; cursor: pointer; }
+#formFrame { display: block; width: 100%; height: calc(100% - 54px); border: 0; }
+.image-modal { background: rgba(0, 0, 0, .92); }
+.image-modal img { max-width: 96vw; max-height: 92vh; object-fit: contain; }
+.image-close { position: absolute; top: 14px; right: 20px; color: #fff; font-size: 44px; }
+
+@media (max-width: 900px) {
+  .hero { position: static; align-items: flex-start; flex-direction: column; padding: 16px; }
+  .actions { width: 100%; }
+  .action { flex: 1; }
+  main { padding: 12px; }
+  .summary-bar .sync { width: 100%; margin-left: 0; }
+  .grid { grid-template-columns: 1fr; }
+  .photo-box { height: 250px; }
+}
