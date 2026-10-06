@@ -12,6 +12,9 @@ Phiên bản này có các chức năng:
 - Điểm tự chấm, chấm chéo và giáo viên chấm có ba màu khác nhau.
 - Trang vẫn hiển thị đủ 6 nhóm; ảnh thu nhỏ, bấm để xem toàn màn hình và xoay ảnh.
 - `index.html` trong gói này đã được gắn sẵn URL Apps Script `/exec` do giáo viên cung cấp.
+- Nút **⚙ QUẢN LÝ** cho phép đổi tên đội/sản phẩm và đặt lại dữ liệu thử nghiệm bằng mã giáo viên.
+- Ảnh được ghép theo tên nhóm trong từng dòng, không còn phụ thuộc thứ tự nhóm gửi.
+- Mã Nhóm 1–6 gồm **3 chữ số**; mã giáo viên gồm **4 chữ số**.
 
 ## Phần A — Cài máy chủ Google Apps Script
 
@@ -33,7 +36,7 @@ Phiên bản này có các chức năng:
 4. Ghi lại 6 mã nhóm và mã giáo viên.
 5. Phát riêng cho mỗi nhóm đúng một mã; không chiếu tất cả mã lên màn hình.
 
-Mã PIN chỉ được lưu trên máy chủ dưới dạng mã hóa một chiều. Nếu quên mã, chạy hàm `secureRotateAllPins` để tạo bộ mã mới.
+Mã PIN chỉ được lưu trên máy chủ dưới dạng mã hóa một chiều. Nếu đang dùng bộ mã dài của bản cũ hoặc quên mã, chạy hàm `secureRotateAllPins` để tạo bộ mã mới gồm 3 số cho nhóm và 4 số cho giáo viên.
 
 ### Bước 3: Triển khai ứng dụng web
 
@@ -45,6 +48,8 @@ Mã PIN chỉ được lưu trên máy chủ dưới dạng mã hóa một chi�
 6. Sao chép URL kết thúc bằng `/exec`.
 
 Mỗi lần sửa `Code.gs`, vào **Triển khai → Quản lý các lần triển khai → Chỉnh sửa → Phiên bản mới → Triển khai**.
+
+Nếu trang báo `Apps Script chưa được triển khai đúng` hoặc trước đây hiện `Unexpected token '<'`, kiểm tra lại đúng hai lựa chọn: **Thực thi với tư cách: Tôi** và **Ai có quyền truy cập: Bất kỳ ai**; sau đó bắt buộc chọn **Phiên bản mới** rồi triển khai.
 
 ### Bước 4: Kiểm tra URL trong trang web
 
@@ -77,6 +82,25 @@ Nếu tạo GitHub Pages lần đầu:
 4. Bấm **Save**.
 
 ## Cách sử dụng
+
+### Đổi tên đội/sản phẩm khi dùng cho lớp khác
+
+1. Bấm **⚙ QUẢN LÝ**.
+2. Nhập tên mới cho 6 nhóm. Các nhãn kỹ thuật **Nhóm 1–Nhóm 6** vẫn giữ nguyên để tính điểm.
+3. Nhập mã giáo viên.
+4. Bấm **LƯU TÊN ĐỘI**.
+
+### Đặt lại buổi chấm
+
+1. Bấm **⚙ QUẢN LÝ**.
+2. Chọn dữ liệu cần đặt lại:
+   - Xóa toàn bộ điểm và nhận xét.
+   - Xóa liên kết ảnh đang hiển thị.
+   - Xóa tên đội/sản phẩm nếu muốn dùng lại cho lớp hoàn toàn mới.
+3. Nhập mã giáo viên và bấm **ĐẶT LẠI BUỔI CHẤM**.
+4. Xác nhận lần cuối.
+
+Thao tác đặt lại chỉ xóa liên kết ảnh khỏi bảng hiển thị; tệp ảnh gốc trong Google Drive không bị xóa.
 
 ### Học sinh chấm điểm
 
