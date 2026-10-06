@@ -96,6 +96,21 @@ Nếu tăng thêm nhóm, trang sẽ báo các mã PIN 3 số mới. Giáo viên 
 
 ### Cấu hình biểu mẫu gửi sản phẩm
 
+#### Cách tự động bằng Apps Script (khuyên dùng)
+
+1. Sau khi dán `Code.gs` mới, bấm **Lưu**.
+2. Trên danh sách hàm, chọn `secureUpgradeProductForm`.
+3. Bấm **Chạy** và cấp thêm quyền chỉnh sửa Google Forms khi được hỏi.
+4. Mở lại đường link biểu mẫu dành cho học sinh.
+
+Hàm sẽ tự tìm Google Form **NỘP ẢNH SẢN PHẨM NHÓM** trong Drive, đổi thành **NỘP SẢN PHẨM NHÓM**, đổi câu hỏi ảnh thành **Ảnh đại diện** và tự thêm **Loại sản phẩm**, **Liên kết sản phẩm**, **Ghi chú**. Có thể chạy lại mà không tạo câu hỏi trùng.
+
+Nếu lần chạy cũ từng dừng ở lỗi `asListItem is not a function`, hãy dán đè `Code.gs` bản mới rồi chạy lại đúng hàm `secureUpgradeProductForm`. Hàm mới tự xử lý câu **Loại sản phẩm** đã được tạo dở; không cần xóa Form và không làm mất ảnh đã nộp.
+
+Sau đó chạy tiếp `secureInstallPhotoSync` một lần để đồng bộ dữ liệu và trình kích hoạt.
+
+#### Cách thủ công nếu không tìm thấy Form
+
 Trong Google Form đang mở từ nút **GỬI SẢN PHẨM**, giữ hai câu hỏi hiện có và bổ sung các câu hỏi sau. Tên câu hỏi nên viết đúng để hệ thống tự nhận cột:
 
 1. **Nhóm nộp sản phẩm** — danh sách Nhóm 1, Nhóm 2… theo số nhóm đang sử dụng.
