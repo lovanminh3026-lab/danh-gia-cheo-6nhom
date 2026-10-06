@@ -1,4 +1,4 @@
-# Hướng dẫn cài hệ thống đánh giá 6 nhóm
+# Hướng dẫn hệ thống đánh giá sản phẩm 2–12 nhóm
 
 Phiên bản này có các chức năng:
 
@@ -7,14 +7,15 @@ Phiên bản này có các chức năng:
 - Giáo viên có nút **Cấp lại quyền chấm** nếu cần cho chấm lại.
 - Lượt cũ được đánh dấu **Đã thu hồi**, không xóa mất lịch sử.
 - Bấm ô **Chấm chéo ⓘ** để xem rõ: “Nhóm X chấm Nhóm Y: 8 điểm”.
-- Ô chấm chéo hiển thị tiến độ `0/5` đến `5/5`.
-- Nút **TỔNG** chỉ xuất hiện khi nhóm đã có đủ 1 lượt tự chấm, đủ 5 nhóm khác chấm và 1 lượt giáo viên chấm.
+- Ô chấm chéo hiển thị số lượt thực tế, ví dụ `Chấm chéo 2 lượt`.
+- **TỔNG TẠM TÍNH** xuất hiện khi có điểm tự chấm, điểm giáo viên và ít nhất 1 lượt chấm chéo; điểm tự cập nhật khi có thêm lượt chấm.
 - Điểm tự chấm, chấm chéo và giáo viên chấm có ba màu khác nhau.
-- Trang vẫn hiển thị đủ 6 nhóm; ảnh thu nhỏ, bấm để xem toàn màn hình và xoay ảnh.
+- Có thể chọn từ **2 đến 12 nhóm**. Tối đa 6 nhóm trên mỗi trang; trên 6 nhóm hệ thống tự phân trang.
+- Hỗ trợ ảnh đại diện kèm liên kết PDF, PowerPoint, video hoặc liên kết khác. Liên kết Drive được tự chuyển sang chế độ `/preview` để xem trực tiếp.
 - `index.html` trong gói này đã được gắn sẵn URL Apps Script `/exec` do giáo viên cung cấp.
 - Nút **⚙ QUẢN LÝ** cho phép đổi tên đội/sản phẩm và đặt lại dữ liệu thử nghiệm bằng mã giáo viên.
 - Ảnh được ghép theo tên nhóm trong từng dòng, không còn phụ thuộc thứ tự nhóm gửi.
-- Mã Nhóm 1–6 gồm **3 chữ số**; mã giáo viên gồm **4 chữ số**.
+- Mã nhóm gồm **3 chữ số**; mã giáo viên gồm **4 chữ số**.
 
 ## Phần A — Cài máy chủ Google Apps Script
 
@@ -86,9 +87,28 @@ Nếu tạo GitHub Pages lần đầu:
 ### Đổi tên đội/sản phẩm khi dùng cho lớp khác
 
 1. Bấm **⚙ QUẢN LÝ**.
-2. Nhập tên mới cho 6 nhóm. Các nhãn kỹ thuật **Nhóm 1–Nhóm 6** vẫn giữ nguyên để tính điểm.
-3. Nhập mã giáo viên.
-4. Bấm **LƯU TÊN ĐỘI**.
+2. Chọn số nhóm từ **2 đến 12**.
+3. Nhập tên đội/sản phẩm cho từng nhóm.
+4. Nhập mã giáo viên.
+5. Bấm **LƯU SỐ NHÓM VÀ TÊN ĐỘI**.
+
+Nếu tăng thêm nhóm, trang sẽ báo các mã PIN 3 số mới. Giáo viên cần ghi lại và phát riêng cho đúng nhóm. Nếu có trên 6 nhóm, dùng nút chuyển trang ở phía dưới màn hình.
+
+### Cấu hình biểu mẫu gửi sản phẩm
+
+Trong Google Form đang mở từ nút **GỬI SẢN PHẨM**, giữ hai câu hỏi hiện có và bổ sung các câu hỏi sau. Tên câu hỏi nên viết đúng để hệ thống tự nhận cột:
+
+1. **Nhóm nộp sản phẩm** — danh sách Nhóm 1, Nhóm 2… theo số nhóm đang sử dụng.
+2. **Loại sản phẩm** — các lựa chọn: Ảnh, PDF, PowerPoint, Video, Liên kết khác.
+3. **Ảnh đại diện** — tải một ảnh nhẹ hoặc ảnh chụp màn hình sản phẩm.
+4. **Liên kết sản phẩm** — câu trả lời ngắn; học sinh dán liên kết Drive, Google Slides, YouTube…
+5. **Ghi chú** — không bắt buộc.
+
+Không yêu cầu học sinh tải video hoặc PowerPoint nặng trong giờ học. Các em chỉ gửi ảnh đại diện và dán liên kết đã chuẩn bị. Khi bấm **XEM SẢN PHẨM**, trang tự mở chế độ xem trước; không bắt tải tệp xuống.
+
+Tệp trên Google Drive phải có quyền **Bất kỳ ai có đường liên kết – Người xem**. Apps Script sẽ cố gắng tự cấp quyền này với các tệp thuộc Drive của chủ biểu mẫu.
+
+Sau khi sửa biểu mẫu hoặc thay `Code.gs`, chọn hàm `secureInstallPhotoSync`, bấm **Chạy** một lần để đồng bộ lại sản phẩm và trình kích hoạt.
 
 ### Đặt lại buổi chấm
 
@@ -140,5 +160,7 @@ Lưu ý thực tế: không có hệ thống nào ngăn được hoàn toàn vi�
 
 - Google Sheet ID hiện tại: `1Ga7dLZHSaSkYFB8FDvCfvvZ0QMYe3hwLZo_sjT0Rkys`
 - Không đổi tên các trang tính **Tổng hợp**, **Ảnh sản phẩm**, **Dữ liệu chấm** và **Nhật ký quyền**.
+- Trang phản hồi sản phẩm phải có tên **Câu trả lời biểu mẫu 2**. Mã tự tìm cột theo tên câu hỏi, vì vậy có thể dùng dữ liệu ảnh cũ và các cột mới nêu trên.
+- Sau khi dán `Code.gs`, chạy `secureInstallPhotoSync()` một lần để sửa dữ liệu cũ, cấp quyền xem và bật tự động đồng bộ cho các lần nộp sau.
 - Trang tính **Dữ liệu chấm** sử dụng cột A:G: Thời gian, Người chấm, Nhóm được chấm, Loại điểm, Điểm, Nhận xét, Trạng thái.
 - Google Sheet vẫn cần đặt quyền **Bất kỳ ai có đường liên kết – Người xem** để trang tổng hợp đọc dữ liệu.
