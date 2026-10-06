@@ -16,6 +16,7 @@ Phiên bản này có các chức năng:
 - Nút **⚙ QUẢN LÝ** cho phép đổi tên đội/sản phẩm và đặt lại dữ liệu thử nghiệm bằng mã giáo viên.
 - Ảnh được ghép theo tên nhóm trong từng dòng, không còn phụ thuộc thứ tự nhóm gửi.
 - Mã nhóm gồm **3 chữ số**; mã giáo viên gồm **4 chữ số**.
+- Đã sửa lỗi bấm **GỬI ĐIỂM** nhưng không có phản hồi; nút đổi thành **ĐANG GỬI...** và thông báo thành công/lỗi hiện ngay phía trên nút.
 
 ## Phần A — Cài máy chủ Google Apps Script
 
@@ -103,7 +104,9 @@ Nếu tăng thêm nhóm, trang sẽ báo các mã PIN 3 số mới. Giáo viên 
 3. Bấm **Chạy** và cấp thêm quyền chỉnh sửa Google Forms khi được hỏi.
 4. Mở lại đường link biểu mẫu dành cho học sinh.
 
-Hàm sẽ tự tìm Google Form **NỘP ẢNH SẢN PHẨM NHÓM** trong Drive, đổi thành **NỘP SẢN PHẨM NHÓM**, đổi câu hỏi ảnh thành **Ảnh đại diện** và tự thêm **Loại sản phẩm**, **Liên kết sản phẩm**, **Ghi chú**. Có thể chạy lại mà không tạo câu hỏi trùng.
+Hàm sẽ tự tìm Google Form trong Drive, đổi tiêu đề ngắn thành **NỘP SẢN PHẨM** và sắp xếp theo thứ tự tối ưu cho điện thoại: **Chọn nhóm → Dán liên kết (nếu có) → Tải ảnh đại diện → Gửi**. Hai câu hỏi phụ “Loại sản phẩm” và “Ghi chú” được bỏ để biểu mẫu ngắn hơn; hệ thống tự nhận loại tệp từ liên kết.
+
+Hàm cũng đối chiếu số nhóm trong trang **Tổng hợp**. Nếu trang tổng hợp có 6 nhóm nhưng Form mới chỉ có Nhóm 1–2, chạy lại `secureUpgradeProductForm` sẽ tự sửa danh sách thành Nhóm 1–6. Từ lần sau, khi đổi số nhóm trong **⚙ QUẢN LÝ**, danh sách trên Form cũng được cập nhật tự động.
 
 Nếu lần chạy cũ từng dừng ở lỗi `asListItem is not a function`, hãy dán đè `Code.gs` bản mới rồi chạy lại đúng hàm `secureUpgradeProductForm`. Hàm mới tự xử lý câu **Loại sản phẩm** đã được tạo dở; không cần xóa Form và không làm mất ảnh đã nộp.
 
