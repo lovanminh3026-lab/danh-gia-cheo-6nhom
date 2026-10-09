@@ -1,5 +1,5 @@
 ĐÁNH GIÁ SẢN PHẨM NHÓM ĐA PHÒNG
-Phiên bản: 2.3.0
+Phiên bản: 2.4.0
 Ngày đóng gói: 09/10/2026
 
 Máy chủ: Google Apps Script + Google Sheets + Google Drive
@@ -31,3 +31,8 @@ Thay đổi v2.3:
 - Nộp sản phẩm và chấm điểm tự nhận đúng nhóm đã được duyệt.
 - Giáo viên chấm không chọn người chấm và không nhập lại PIN.
 - Mã mời/mã quản trị giữ cố định; quản trị viên có thể đổi trong giao diện.
+
+Thay đổi v2.4:
+- Bỏ hai nút Vào phòng/Giáo viên bị trùng ở thanh đầu trang.
+- Thêm nút RESET trên từng phòng: giữ cấu hình phòng nhưng xóa sản phẩm, điểm và quyền thiết bị.
+- Thêm nút XÓA trên từng phòng: xóa phòng và dữ liệu liên quan sau khi xác nhận.

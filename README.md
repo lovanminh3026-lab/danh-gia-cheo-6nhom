@@ -1,4 +1,4 @@
-# Hệ thống đánh giá sản phẩm nhóm đa phòng v2.3
+# Hệ thống đánh giá sản phẩm nhóm đa phòng v2.4
 
 Một website dùng chung cho nhiều giáo viên và nhiều lớp cùng lúc. Giáo viên không phải sao chép mã nguồn hay tạo ứng dụng mới.
 
@@ -20,6 +20,7 @@ Một website dùng chung cho nhiều giáo viên và nhiều lớp cùng lúc. 
 - Nộp sản phẩm và gửi điểm đều có bước xác nhận bằng hai nút Xác nhận/Bỏ.
 - Giáo viên có thể duyệt, từ chối hoặc thu hồi thiết bị của từng nhóm.
 - Mã mời và mã quản trị giữ nguyên cho đến khi quản trị viên chủ động đổi trong giao diện.
+- Mỗi thẻ phòng có nút **RESET** để dùng lại cấu hình phòng và nút **XÓA** khi không còn sử dụng.
 
 ## Các tệp
 
@@ -122,6 +123,12 @@ Mỗi buổi học nên tạo một phòng mới. Không cần xóa dữ liệu 
 - **MỞ PHÒNG**: cho phép tiếp tục gửi.
 - **QR & LINK**: mở lại mã QR dành cho học sinh.
 
+### Làm mới hoặc xóa phòng
+
+- **RESET**: giữ mã phòng, tên buổi học, lớp, danh sách nhóm và tỉ lệ điểm; xóa sản phẩm, toàn bộ điểm và quyền thiết bị; sau đó mở lại phòng.
+- **XÓA**: xóa phòng, nhóm, sản phẩm, điểm, quyền thiết bị và đưa thư mục ảnh của phòng vào thùng rác Drive.
+- Cả hai thao tác đều có cửa sổ xác nhận trước khi thực hiện.
+
 ## D. Cách dùng dành cho học sinh
 
 1. Quét QR hoặc nhập mã phòng 6 ký tự.
@@ -139,7 +146,7 @@ Học sinh không cần tạo tài khoản. Mã phòng xác định buổi học
 
 ## Cập nhật trực tiếp từ v2.1
 
-1. Dán đè `Code.gs` v2.3 vào **`Code.gs` của dự án Apps Script đa phòng mới**; không dán vào dự án cũ có `Mã.gs`/`BaoMatChamDiem.gs`.
+1. Dán đè `Code.gs` v2.4 vào **`Code.gs` của dự án Apps Script đa phòng mới**; không dán vào dự án cũ có `Mã.gs`/`BaoMatChamDiem.gs`.
 2. Chạy lại `setupMultiRoomSystem` đúng một lần để tạo trang **Thiết bị**. Dữ liệu cũ không bị xóa; mã mời và mã quản trị không tự đổi.
 3. Tạo phiên bản triển khai mới trong cùng lần triển khai Apps Script để giữ nguyên URL `/exec`.
 4. Tải đè `index.html` lên repository GitHub đang dùng và commit.
