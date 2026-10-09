@@ -1,4 +1,4 @@
-# Hệ thống đánh giá sản phẩm nhóm đa phòng v2.1
+# Hệ thống đánh giá sản phẩm nhóm đa phòng v2.3
 
 Một website dùng chung cho nhiều giáo viên và nhiều lớp cùng lúc. Giáo viên không phải sao chép mã nguồn hay tạo ứng dụng mới.
 
@@ -7,13 +7,19 @@ Một website dùng chung cho nhiều giáo viên và nhiều lớp cùng lúc. 
 - Mỗi giáo viên có tài khoản riêng bằng email và PIN 6 số.
 - Quản trị viên cấp một mã mời 6 số để đồng nghiệp tự đăng ký.
 - Mỗi tiết học tạo một mã phòng 6 ký tự và một QR riêng.
-- Mỗi phòng có 2–12 nhóm; PIN nhóm gồm 3 số và chỉ dùng trong đúng phòng đó.
+- Mỗi phòng có 2–12 nhóm; học sinh chọn nhóm rồi chờ giáo viên duyệt thiết bị, không dùng PIN nhóm.
 - Ảnh, liên kết, điểm và nhận xét đều được gắn mã phòng nên không lẫn giữa các giáo viên.
 - Mỗi nhóm chỉ được tự chấm một lần và chấm mỗi nhóm khác một lần.
 - Giáo viên chấm một lần cho mỗi nhóm và có thể cấp lại quyền chấm.
 - Giáo viên có thể khóa/mở phòng. Phòng đã khóa vẫn xem được báo cáo nhưng không nhận dữ liệu mới.
 - Ảnh được tự nén trên điện thoại trước khi gửi; PDF, PowerPoint và video dùng liên kết.
 - Báo cáo hiển thị tối đa 6 nhóm mỗi trang, ảnh phóng toàn màn hình và có nút xoay.
+- Mã phòng hiển thị lớn ngay cạnh QR để học sinh có thể quét hoặc nhập tay.
+- Học sinh chọn nhóm, gửi yêu cầu và chờ giáo viên duyệt; sau đó không phải chọn lại nhóm gửi/nhóm chấm.
+- Thanh đầu phòng của học sinh chỉ còn hai nút Nộp sản phẩm/Chấm điểm và trạng thái ngắn gọn của nhóm.
+- Nộp sản phẩm và gửi điểm đều có bước xác nhận bằng hai nút Xác nhận/Bỏ.
+- Giáo viên có thể duyệt, từ chối hoặc thu hồi thiết bị của từng nhóm.
+- Mã mời và mã quản trị giữ nguyên cho đến khi quản trị viên chủ động đổi trong giao diện.
 
 ## Các tệp
 
@@ -44,7 +50,7 @@ Một website dùng chung cho nhiều giáo viên và nhiều lớp cùng lúc. 
    - `MÃ MỜI GIÁO VIÊN` – gửi cho đồng nghiệp được phép đăng ký;
    - `MÃ QUẢN TRỊ HỆ THỐNG` – chỉ chủ hệ thống giữ.
 
-Hàm tự tạo Google Sheet `DỮ LIỆU ĐÁNH GIÁ NHÓM ĐA PHÒNG`, sáu trang tính **GV, Phòng học, Nhóm, Sản phẩm, Điểm, Nhật ký** và một thư mục Drive `DANH_GIA_NHOM_DA_PHONG`.
+Hàm tự tạo Google Sheet `DỮ LIỆU ĐÁNH GIÁ NHÓM ĐA PHÒNG`, bảy trang tính **GV, Phòng học, Nhóm, Thiết bị, Sản phẩm, Điểm, Nhật ký** và một thư mục Drive `DANH_GIA_NHOM_DA_PHONG`.
 
 Nếu cần hủy mã mời cũ, chạy `rotateTeacherInviteCode` và ghi lại mã mới trong Nhật ký thực thi.
 
@@ -102,14 +108,15 @@ PIN giáo viên không được lưu dưới dạng văn bản; máy chủ chỉ
 3. Chọn tỉ lệ điểm; tổng phải bằng 100%.
 4. Có thể nhập tên nhóm, mỗi dòng một tên.
 5. Bấm **TẠO PHÒNG VÀ SINH MÃ**.
-6. Chụp hoặc lưu bảng PIN nhóm ngay lúc đó.
-7. Chiếu QR hoặc gửi đường liên kết phòng cho học sinh.
+6. Chiếu QR hoặc đọc mã phòng cho học sinh.
+7. Mở **DUYỆT THIẾT BỊ** và duyệt đúng một thiết bị cho mỗi nhóm.
 
 Mỗi buổi học nên tạo một phòng mới. Không cần xóa dữ liệu của tiết trước.
 
 ### Quản lý trong giờ học
 
 - **GV CHẤM**: nhập điểm giáo viên cho từng nhóm.
+- **DUYỆT THIẾT BỊ**: duyệt, từ chối hoặc thu hồi thiết bị của nhóm.
 - **CẤP LẠI LƯỢT**: thu hồi lượt chấm cũ để nhóm/GV được chấm lại một lần.
 - **KHÓA PHÒNG**: dừng nhận sản phẩm và điểm.
 - **MỞ PHÒNG**: cho phép tiếp tục gửi.
@@ -118,17 +125,24 @@ Mỗi buổi học nên tạo một phòng mới. Không cần xóa dữ liệu 
 ## D. Cách dùng dành cho học sinh
 
 1. Quét QR hoặc nhập mã phòng 6 ký tự.
-2. Bấm **NỘP SẢN PHẨM**:
-   - chọn nhóm;
-   - nhập PIN 3 số;
+2. Chọn nhóm, xác nhận và bấm **XIN VÀO NHÓM**.
+3. Chờ giáo viên duyệt thiết bị.
+4. Bấm **NỘP SẢN PHẨM**:
    - tải ảnh đại diện và/hoặc dán liên kết;
-   - bấm gửi.
-3. Bấm **CHẤM ĐIỂM**:
-   - chọn nhóm chấm và nhóm được chấm;
-   - nhập PIN, điểm, nhận xét;
-   - bấm gửi.
+   - bấm gửi và xác nhận.
+5. Bấm **CHẤM ĐIỂM**:
+   - chọn nhóm được chấm;
+   - nhập điểm, nhận xét;
+   - bấm gửi và xác nhận.
 
-Học sinh không cần tạo tài khoản. Mã phòng xác định buổi học; PIN xác định nhóm.
+Học sinh không cần tạo tài khoản. Mã phòng xác định buổi học; thiết bị được giáo viên duyệt xác định nhóm.
+
+## Cập nhật trực tiếp từ v2.1
+
+1. Dán đè `Code.gs` v2.3 vào **`Code.gs` của dự án Apps Script đa phòng mới**; không dán vào dự án cũ có `Mã.gs`/`BaoMatChamDiem.gs`.
+2. Chạy lại `setupMultiRoomSystem` đúng một lần để tạo trang **Thiết bị**. Dữ liệu cũ không bị xóa; mã mời và mã quản trị không tự đổi.
+3. Tạo phiên bản triển khai mới trong cùng lần triển khai Apps Script để giữ nguyên URL `/exec`.
+4. Tải đè `index.html` lên repository GitHub đang dùng và commit.
 
 ## E. Dữ liệu và thư mục ảnh
 
@@ -147,7 +161,7 @@ Video, PDF và PowerPoint nặng không tải trực tiếp lên hệ thống; h
 - Không đăng `Code.gs` lên GitHub công khai.
 - Không gửi mã quản trị hệ thống cho giáo viên hoặc học sinh.
 - Chỉ phát mã mời giáo viên cho người được phép sử dụng; đổi mã khi bị lộ.
-- Không chiếu đồng thời toàn bộ PIN nhóm nếu không cần thiết; phát riêng cho từng nhóm.
+- Chỉ duyệt thiết bị khi nhóm trên màn hình học sinh khớp với nhóm thực tế; nếu đổi máy, thu hồi thiết bị cũ trước.
 - Dữ liệu và ảnh nằm trong tài khoản Google của người triển khai máy chủ trung tâm.
 - Sao lưu Google Sheet định kỳ bằng **Tệp → Tạo bản sao**.
 - Apps Script có hạn mức theo tài khoản. Bản này phù hợp thí điểm trong trường; nếu triển khai quy mô lớn nhiều trường, nên chuyển phần máy chủ sang Firebase/Cloud Run.

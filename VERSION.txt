@@ -1,5 +1,5 @@
 ĐÁNH GIÁ SẢN PHẨM NHÓM ĐA PHÒNG
-Phiên bản: 2.1.0
+Phiên bản: 2.3.0
 Ngày đóng gói: 09/10/2026
 
 Máy chủ: Google Apps Script + Google Sheets + Google Drive
@@ -16,3 +16,18 @@ Thay đổi v2.1:
 - Chạy được từ dự án Apps Script độc lập.
 - Tự tạo Google Sheet trung tâm khi chạy setupMultiRoomSystem.
 - Ghi rõ không dán đè vào Mã.gs/BaoMatChamDiem.gs của bản cũ.
+
+Thay đổi v2.2:
+- Giáo viên hiện/ẩn PIN; mã phòng đặt cạnh QR.
+- Học sinh xác thực nhóm một lần, không chọn lại nhóm gửi/nhóm chấm.
+- Thanh trạng thái nhóm gọn trên máy tính và điện thoại.
+- Xác nhận trước khi gửi sản phẩm hoặc điểm.
+- Phòng cũ có thể tự cấp lại PIN khi giáo viên mở bảng mã.
+
+Thay đổi v2.3:
+- Bỏ hoàn toàn PIN nhóm.
+- Học sinh xin vào nhóm; giáo viên duyệt/từ chối/thu hồi thiết bị.
+- Quyền thiết bị tách riêng theo từng phòng và được lưu an toàn bằng mã phiên băm.
+- Nộp sản phẩm và chấm điểm tự nhận đúng nhóm đã được duyệt.
+- Giáo viên chấm không chọn người chấm và không nhập lại PIN.
+- Mã mời/mã quản trị giữ cố định; quản trị viên có thể đổi trong giao diện.
