@@ -1,184 +1,174 @@
-# Hướng dẫn hệ thống đánh giá sản phẩm 2–12 nhóm
+# Hệ thống đánh giá sản phẩm nhóm đa phòng v2.1
 
-Phiên bản này có các chức năng:
+Một website dùng chung cho nhiều giáo viên và nhiều lớp cùng lúc. Giáo viên không phải sao chép mã nguồn hay tạo ứng dụng mới.
 
-- Mỗi nhóm chỉ được tự chấm **1 lần** và chấm từng nhóm khác **1 lần**.
-- Mỗi nhóm có **mã PIN riêng** để chống giả danh.
-- Giáo viên có nút **Cấp lại quyền chấm** nếu cần cho chấm lại.
-- Lượt cũ được đánh dấu **Đã thu hồi**, không xóa mất lịch sử.
-- Bấm ô **Chấm chéo ⓘ** để xem rõ: “Nhóm X chấm Nhóm Y: 8 điểm”.
-- Ô chấm chéo hiển thị số lượt thực tế, ví dụ `Chấm chéo 2 lượt`.
-- **TỔNG TẠM TÍNH** xuất hiện khi có điểm tự chấm, điểm giáo viên và ít nhất 1 lượt chấm chéo; điểm tự cập nhật khi có thêm lượt chấm.
-- Điểm tự chấm, chấm chéo và giáo viên chấm có ba màu khác nhau.
-- Có thể chọn từ **2 đến 12 nhóm**. Tối đa 6 nhóm trên mỗi trang; trên 6 nhóm hệ thống tự phân trang.
-- Hỗ trợ ảnh đại diện kèm liên kết PDF, PowerPoint, video hoặc liên kết khác. Liên kết Drive được tự chuyển sang chế độ `/preview` để xem trực tiếp.
-- `index.html` trong gói này đã được gắn sẵn URL Apps Script `/exec` do giáo viên cung cấp.
-- Nút **⚙ QUẢN LÝ** cho phép đổi tên đội/sản phẩm và đặt lại dữ liệu thử nghiệm bằng mã giáo viên.
-- Ảnh được ghép theo tên nhóm trong từng dòng, không còn phụ thuộc thứ tự nhóm gửi.
-- Mã nhóm gồm **3 chữ số**; mã giáo viên gồm **4 chữ số**.
-- Đã sửa lỗi bấm **GỬI ĐIỂM** nhưng không có phản hồi; nút đổi thành **ĐANG GỬI...** và thông báo thành công/lỗi hiện ngay phía trên nút.
+## Điểm mới
 
-## Phần A — Cài máy chủ Google Apps Script
+- Mỗi giáo viên có tài khoản riêng bằng email và PIN 6 số.
+- Quản trị viên cấp một mã mời 6 số để đồng nghiệp tự đăng ký.
+- Mỗi tiết học tạo một mã phòng 6 ký tự và một QR riêng.
+- Mỗi phòng có 2–12 nhóm; PIN nhóm gồm 3 số và chỉ dùng trong đúng phòng đó.
+- Ảnh, liên kết, điểm và nhận xét đều được gắn mã phòng nên không lẫn giữa các giáo viên.
+- Mỗi nhóm chỉ được tự chấm một lần và chấm mỗi nhóm khác một lần.
+- Giáo viên chấm một lần cho mỗi nhóm và có thể cấp lại quyền chấm.
+- Giáo viên có thể khóa/mở phòng. Phòng đã khóa vẫn xem được báo cáo nhưng không nhận dữ liệu mới.
+- Ảnh được tự nén trên điện thoại trước khi gửi; PDF, PowerPoint và video dùng liên kết.
+- Báo cáo hiển thị tối đa 6 nhóm mỗi trang, ảnh phóng toàn màn hình và có nút xoay.
 
-### Bước 1: Mở Apps Script
+## Các tệp
 
-1. Mở dự án Apps Script **Đánh giá chéo 6 nhóm - Tạo tự động**.
-2. Ở mục **Tệp**, bấm dấu **+ → Script**.
-3. Đặt tên tệp mới là `BaoMatChamDiem`.
-4. Mở tệp `Code.gs` trong gói này, sao chép toàn bộ và dán vào tệp mới.
-5. Bấm **Lưu**. Không xóa tệp `Mã.gs` cũ.
+- `Code.gs`: máy chủ Apps Script. Không đưa tệp này lên GitHub công khai.
+- `index.html`: giao diện đưa lên GitHub Pages.
+- `README.md`: hướng dẫn này.
 
-> Không tải `Code.gs` lên GitHub công khai. GitHub Pages chỉ cần tệp `index.html`.
+## A. Tạo máy chủ trung tâm – chỉ làm một lần
 
-### Bước 2: Tạo mã PIN
+### Bước 1: Tạo dự án Apps Script mới
 
-1. Trên thanh chọn hàm, chọn `secureSetupSystem` (không chọn `setupSystem` của bản cũ).
-2. Bấm **Chạy** và cho phép quyền truy cập khi Google hỏi.
-3. Mở **Nhật ký thực thi** ở cuối màn hình.
-4. Ghi lại 6 mã nhóm và mã giáo viên.
-5. Phát riêng cho mỗi nhóm đúng một mã; không chiếu tất cả mã lên màn hình.
+1. Mở `https://script.google.com` bằng tài khoản Google sẽ lưu dữ liệu.
+2. Bấm **Dự án mới**.
+3. Đổi tên dự án thành `ĐÁNH GIÁ NHÓM ĐA PHÒNG`.
+4. Bấm tệp **`Code.gs`** đang có sẵn và xóa mã mẫu.
+5. Mở tệp **`Code.gs` trong gói này**, sao chép toàn bộ rồi dán vào **`Code.gs` của dự án mới**.
+6. Bấm **Lưu**.
 
-Mã PIN chỉ được lưu trên máy chủ dưới dạng mã hóa một chiều. Nếu đang dùng bộ mã dài của bản cũ hoặc quên mã, chạy hàm `secureRotateAllPins` để tạo bộ mã mới gồm 3 số cho nhóm và 4 số cho giáo viên.
+**Không dán vào `Mã.gs` hoặc `BaoMatChamDiem.gs` của ứng dụng cũ.** Bản cũ được giữ nguyên để dự phòng.
 
-### Bước 3: Triển khai ứng dụng web
+### Bước 2: Khởi tạo hệ thống
 
-1. Bấm **Triển khai → Lần triển khai mới**.
-2. Chọn loại **Ứng dụng web**.
-3. **Thực thi với tư cách:** Tôi.
-4. **Ai có quyền truy cập:** Bất kỳ ai.
-5. Bấm **Triển khai**.
-6. Sao chép URL kết thúc bằng `/exec`.
+1. Trên danh sách hàm, chọn `setupMultiRoomSystem`.
+2. Bấm **Chạy** và cấp quyền Google Sheet/Drive.
+3. Mở **Nhật ký thực thi**.
+4. Ghi lại:
+   - `GOOGLE SHEET TRUNG TÂM` – bấm liên kết để mở Sheet được tạo tự động;
+   - `MÃ MỜI GIÁO VIÊN` – gửi cho đồng nghiệp được phép đăng ký;
+   - `MÃ QUẢN TRỊ HỆ THỐNG` – chỉ chủ hệ thống giữ.
 
-Mỗi lần sửa `Code.gs`, vào **Triển khai → Quản lý các lần triển khai → Chỉnh sửa → Phiên bản mới → Triển khai**.
+Hàm tự tạo Google Sheet `DỮ LIỆU ĐÁNH GIÁ NHÓM ĐA PHÒNG`, sáu trang tính **GV, Phòng học, Nhóm, Sản phẩm, Điểm, Nhật ký** và một thư mục Drive `DANH_GIA_NHOM_DA_PHONG`.
 
-Nếu trang báo `Apps Script chưa được triển khai đúng` hoặc trước đây hiện `Unexpected token '<'`, kiểm tra lại đúng hai lựa chọn: **Thực thi với tư cách: Tôi** và **Ai có quyền truy cập: Bất kỳ ai**; sau đó bắt buộc chọn **Phiên bản mới** rồi triển khai.
+Nếu cần hủy mã mời cũ, chạy `rotateTeacherInviteCode` và ghi lại mã mới trong Nhật ký thực thi.
 
-### Bước 4: Kiểm tra URL trong trang web
+### Bước 3: Triển khai Apps Script
 
-URL đã được điền sẵn. Khi triển khai lại bằng một URL khác, mở `index.html` và tìm dòng:
+1. Chọn **Triển khai → Lần triển khai mới**.
+2. Loại: **Ứng dụng web**.
+3. Thực thi với tư cách: **Tôi**.
+4. Ai có quyền truy cập: **Bất kỳ ai**.
+5. Bấm **Triển khai** và sao chép URL kết thúc bằng `/exec`.
+
+Khi sửa `Code.gs`, chọn **Triển khai → Quản lý các lần triển khai → Chỉnh sửa → Phiên bản mới → Triển khai**.
+
+## B. Cấu hình và đăng website
+
+1. Mở `index.html` bằng trình soạn thảo.
+2. Tìm dòng:
 
 ```js
 const API_URL='PASTE_APPS_SCRIPT_WEB_APP_URL_HERE';
 ```
 
-Thay phần trong dấu nháy bằng URL `/exec` vừa sao chép, ví dụ:
+3. Thay bằng URL `/exec`, ví dụ:
 
 ```js
-const API_URL='https://script.google.com/macros/s/MA_CUA_BAN/exec';
+const API_URL='https://script.google.com/macros/s/MA_TRIEN_KHAI/exec';
 ```
 
-## Phần B — Đưa lên GitHub Pages
+4. Tạo một repository GitHub mới, ví dụ `danh-gia-nhom-da-phong`.
+5. Tải `index.html` lên thư mục gốc và commit.
+6. Vào **Settings → Pages**:
+   - Source: **Deploy from a branch**;
+   - Branch: **main**;
+   - Folder: **/(root)**.
+7. Chờ 1–3 phút rồi mở đường dẫn GitHub Pages.
 
-1. Mở repository GitHub đang sử dụng.
-2. Tải đè tệp `index.html` mới vào thư mục ngoài cùng.
-3. Bấm **Commit changes**.
-4. Chờ khoảng 1–3 phút rồi nhấn `Ctrl + F5` để tải lại trang.
+Chỉ cần một repository, một website, một Apps Script và một Sheet cho toàn hệ thống.
 
-Chỉ tải `index.html` lên GitHub; không tải `Code.gs` và không tải README nếu không cần.
+## C. Cách dùng dành cho giáo viên
 
-Nếu tạo GitHub Pages lần đầu:
+### Đăng ký lần đầu
 
-1. Vào **Settings → Pages**.
-2. Source: **Deploy from a branch**.
-3. Branch: **main**, thư mục: **/(root)**.
-4. Bấm **Save**.
+1. Mở website chung.
+2. Chọn **GIÁO VIÊN → ĐĂNG KÝ**.
+3. Nhập họ tên, email, tự tạo PIN giáo viên 6 số.
+4. Nhập mã mời do quản trị viên cung cấp.
+5. Sau khi đăng ký, hệ thống mở trang phòng học của giáo viên.
 
-## Cách sử dụng
+PIN giáo viên không được lưu dưới dạng văn bản; máy chủ chỉ lưu mã băm SHA-256.
 
-### Đổi tên đội/sản phẩm khi dùng cho lớp khác
+### Tạo một buổi đánh giá
 
-1. Bấm **⚙ QUẢN LÝ**.
-2. Chọn số nhóm từ **2 đến 12**.
-3. Nhập tên đội/sản phẩm cho từng nhóm.
-4. Nhập mã giáo viên.
-5. Bấm **LƯU SỐ NHÓM VÀ TÊN ĐỘI**.
+1. Bấm **+ TẠO PHÒNG**.
+2. Nhập tên hoạt động, lớp và số nhóm.
+3. Chọn tỉ lệ điểm; tổng phải bằng 100%.
+4. Có thể nhập tên nhóm, mỗi dòng một tên.
+5. Bấm **TẠO PHÒNG VÀ SINH MÃ**.
+6. Chụp hoặc lưu bảng PIN nhóm ngay lúc đó.
+7. Chiếu QR hoặc gửi đường liên kết phòng cho học sinh.
 
-Nếu tăng thêm nhóm, trang sẽ báo các mã PIN 3 số mới. Giáo viên cần ghi lại và phát riêng cho đúng nhóm. Nếu có trên 6 nhóm, dùng nút chuyển trang ở phía dưới màn hình.
+Mỗi buổi học nên tạo một phòng mới. Không cần xóa dữ liệu của tiết trước.
 
-### Cấu hình biểu mẫu gửi sản phẩm
+### Quản lý trong giờ học
 
-#### Cách tự động bằng Apps Script (khuyên dùng)
+- **GV CHẤM**: nhập điểm giáo viên cho từng nhóm.
+- **CẤP LẠI LƯỢT**: thu hồi lượt chấm cũ để nhóm/GV được chấm lại một lần.
+- **KHÓA PHÒNG**: dừng nhận sản phẩm và điểm.
+- **MỞ PHÒNG**: cho phép tiếp tục gửi.
+- **QR & LINK**: mở lại mã QR dành cho học sinh.
 
-1. Sau khi dán `Code.gs` mới, bấm **Lưu**.
-2. Trên danh sách hàm, chọn `secureUpgradeProductForm`.
-3. Bấm **Chạy** và cấp thêm quyền chỉnh sửa Google Forms khi được hỏi.
-4. Mở lại đường link biểu mẫu dành cho học sinh.
+## D. Cách dùng dành cho học sinh
 
-Hàm sẽ tự tìm Google Form trong Drive, đổi tiêu đề ngắn thành **NỘP SẢN PHẨM** và sắp xếp theo thứ tự tối ưu cho điện thoại: **Chọn nhóm → Dán liên kết (nếu có) → Tải ảnh đại diện → Gửi**. Hai câu hỏi phụ “Loại sản phẩm” và “Ghi chú” được bỏ để biểu mẫu ngắn hơn; hệ thống tự nhận loại tệp từ liên kết.
+1. Quét QR hoặc nhập mã phòng 6 ký tự.
+2. Bấm **NỘP SẢN PHẨM**:
+   - chọn nhóm;
+   - nhập PIN 3 số;
+   - tải ảnh đại diện và/hoặc dán liên kết;
+   - bấm gửi.
+3. Bấm **CHẤM ĐIỂM**:
+   - chọn nhóm chấm và nhóm được chấm;
+   - nhập PIN, điểm, nhận xét;
+   - bấm gửi.
 
-Hàm cũng đối chiếu số nhóm trong trang **Tổng hợp**. Nếu trang tổng hợp có 6 nhóm nhưng Form mới chỉ có Nhóm 1–2, chạy lại `secureUpgradeProductForm` sẽ tự sửa danh sách thành Nhóm 1–6. Từ lần sau, khi đổi số nhóm trong **⚙ QUẢN LÝ**, danh sách trên Form cũng được cập nhật tự động.
+Học sinh không cần tạo tài khoản. Mã phòng xác định buổi học; PIN xác định nhóm.
 
-Nếu lần chạy cũ từng dừng ở lỗi `asListItem is not a function`, hãy dán đè `Code.gs` bản mới rồi chạy lại đúng hàm `secureUpgradeProductForm`. Hàm mới tự xử lý câu **Loại sản phẩm** đã được tạo dở; không cần xóa Form và không làm mất ảnh đã nộp.
+## E. Dữ liệu và thư mục ảnh
 
-Sau đó chạy tiếp `secureInstallPhotoSync` một lần để đồng bộ dữ liệu và trình kích hoạt.
+Mọi dữ liệu có cấu trúc:
 
-#### Cách thủ công nếu không tìm thấy Form
+`Mã giáo viên → Mã phòng → Mã nhóm`
 
-Trong Google Form đang mở từ nút **GỬI SẢN PHẨM**, giữ hai câu hỏi hiện có và bổ sung các câu hỏi sau. Tên câu hỏi nên viết đúng để hệ thống tự nhận cột:
+Ảnh được lưu trong Drive:
 
-1. **Nhóm nộp sản phẩm** — danh sách Nhóm 1, Nhóm 2… theo số nhóm đang sử dụng.
-2. **Loại sản phẩm** — các lựa chọn: Ảnh, PDF, PowerPoint, Video, Liên kết khác.
-3. **Ảnh đại diện** — tải một ảnh nhẹ hoặc ảnh chụp màn hình sản phẩm.
-4. **Liên kết sản phẩm** — câu trả lời ngắn; học sinh dán liên kết Drive, Google Slides, YouTube…
-5. **Ghi chú** — không bắt buộc.
+`DANH_GIA_NHOM_DA_PHONG / Mã giáo viên / Mã phòng`
 
-Không yêu cầu học sinh tải video hoặc PowerPoint nặng trong giờ học. Các em chỉ gửi ảnh đại diện và dán liên kết đã chuẩn bị. Khi bấm **XEM SẢN PHẨM**, trang tự mở chế độ xem trước; không bắt tải tệp xuống.
+Video, PDF và PowerPoint nặng không tải trực tiếp lên hệ thống; học sinh dán liên kết Drive/Slides/YouTube đã bật quyền xem.
 
-Tệp trên Google Drive phải có quyền **Bất kỳ ai có đường liên kết – Người xem**. Apps Script sẽ cố gắng tự cấp quyền này với các tệp thuộc Drive của chủ biểu mẫu.
+## F. Lưu ý bảo mật và vận hành
 
-Sau khi sửa biểu mẫu hoặc thay `Code.gs`, chọn hàm `secureInstallPhotoSync`, bấm **Chạy** một lần để đồng bộ lại sản phẩm và trình kích hoạt.
+- Không đăng `Code.gs` lên GitHub công khai.
+- Không gửi mã quản trị hệ thống cho giáo viên hoặc học sinh.
+- Chỉ phát mã mời giáo viên cho người được phép sử dụng; đổi mã khi bị lộ.
+- Không chiếu đồng thời toàn bộ PIN nhóm nếu không cần thiết; phát riêng cho từng nhóm.
+- Dữ liệu và ảnh nằm trong tài khoản Google của người triển khai máy chủ trung tâm.
+- Sao lưu Google Sheet định kỳ bằng **Tệp → Tạo bản sao**.
+- Apps Script có hạn mức theo tài khoản. Bản này phù hợp thí điểm trong trường; nếu triển khai quy mô lớn nhiều trường, nên chuyển phần máy chủ sang Firebase/Cloud Run.
+- Một ảnh sau nén tối đa 2 MB. Ảnh gốc trên điện thoại tối đa 15 MB.
+- Nếu chính sách Google Workspace không cho chia sẻ tệp bằng liên kết, ảnh có thể lưu lên Drive nhưng không hiện công khai; khi đó cần quản trị viên miền điều chỉnh chính sách hoặc dùng kho ảnh khác.
 
-### Đặt lại buổi chấm
+## G. Kiểm tra trước khi sử dụng thật
 
-1. Bấm **⚙ QUẢN LÝ**.
-2. Chọn dữ liệu cần đặt lại:
-   - Xóa toàn bộ điểm và nhận xét.
-   - Xóa liên kết ảnh đang hiển thị.
-   - Xóa tên đội/sản phẩm nếu muốn dùng lại cho lớp hoàn toàn mới.
-3. Nhập mã giáo viên và bấm **ĐẶT LẠI BUỔI CHẤM**.
-4. Xác nhận lần cuối.
+1. Đăng ký hai tài khoản giáo viên khác nhau.
+2. Mỗi giáo viên tạo một phòng.
+3. Mở hai phòng trên hai thiết bị hoặc hai cửa sổ ẩn danh.
+4. Nộp sản phẩm và điểm cho Nhóm 1 ở cả hai phòng.
+5. Xác nhận dữ liệu không xuất hiện lẫn nhau.
+6. Thử chấm cùng một cặp hai lần để kiểm tra chống trùng.
+7. Khóa phòng và thử gửi lại để kiểm tra máy chủ từ chối.
 
-Thao tác đặt lại chỉ xóa liên kết ảnh khỏi bảng hiển thị; tệp ảnh gốc trong Google Drive không bị xóa.
+## H. Những chức năng có thể bổ sung ở bản sau
 
-### Học sinh chấm điểm
-
-1. Bấm **CHẤM ĐIỂM**.
-2. Chọn đúng **Người chấm** và **Nhóm được chấm**.
-3. Nhập điểm, nhận xét và mã PIN của nhóm mình.
-4. Bấm **GỬI ĐIỂM**.
-
-Nếu cặp này đã chấm rồi, hệ thống từ chối và yêu cầu giáo viên cấp lại quyền.
-
-### Giáo viên cấp lại quyền
-
-1. Bấm **CHẤM ĐIỂM → GV: Cấp lại quyền chấm**.
-2. Chọn người chấm và nhóm được chấm.
-3. Nhập mã quản trị giáo viên.
-4. Bấm **CẤP LẠI QUYỀN**.
-
-Hệ thống đánh dấu lượt cũ là **Đã thu hồi**. Người chấm được gửi lại đúng một lần.
-
-### Xem từng nhóm đã chấm bao nhiêu
-
-Bấm trực tiếp vào ô màu cam **Chấm chéo ⓘ** trên thẻ nhóm. Trang sẽ liệt kê từng lượt, ví dụ:
-
-`Nhóm 2 chấm Nhóm 5: 8,00 điểm`
-
-## Chống giả danh và spam
-
-- Đổi tên nhóm trên giao diện không đủ để gửi điểm; mã PIN phải đúng.
-- Máy chủ kiểm tra trùng trong lúc khóa dữ liệu, nên bấm liên tục cũng không tạo nhiều lượt.
-- Không đặt mã PIN trong `index.html`, Google Form hoặc Google Sheet công khai.
-- Nếu nghi ngờ một nhóm làm lộ mã: mở `Code.gs`, sửa tên nhóm trong hàm `secureRotateOneGroupPin`, chạy hàm và phát mã mới cho nhóm đó.
-- Trang **Nhật ký quyền** ghi lại mọi lần giáo viên cấp lại quyền.
-
-Lưu ý thực tế: không có hệ thống nào ngăn được hoàn toàn việc học sinh tự đưa mã PIN cho nhóm khác. Biện pháp phù hợp trong lớp học là phát mã riêng, yêu cầu không chia sẻ, và đổi ngay mã của nhóm khi nghi ngờ bị lộ.
-
-## Dữ liệu cần giữ nguyên
-
-- Google Sheet ID hiện tại: `1Ga7dLZHSaSkYFB8FDvCfvvZ0QMYe3hwLZo_sjT0Rkys`
-- Không đổi tên các trang tính **Tổng hợp**, **Ảnh sản phẩm**, **Dữ liệu chấm** và **Nhật ký quyền**.
-- Trang phản hồi sản phẩm phải có tên **Câu trả lời biểu mẫu 2**. Mã tự tìm cột theo tên câu hỏi, vì vậy có thể dùng dữ liệu ảnh cũ và các cột mới nêu trên.
-- Sau khi dán `Code.gs`, chạy `secureInstallPhotoSync()` một lần để sửa dữ liệu cũ, cấp quyền xem và bật tự động đồng bộ cho các lần nộp sau.
-- Trang tính **Dữ liệu chấm** sử dụng cột A:G: Thời gian, Người chấm, Nhóm được chấm, Loại điểm, Điểm, Nhận xét, Trạng thái.
-- Google Sheet vẫn cần đặt quyền **Bất kỳ ai có đường liên kết – Người xem** để trang tổng hợp đọc dữ liệu.
+- Quản trị viên xem danh sách toàn bộ giáo viên/phòng.
+- Xuất báo cáo Excel/PDF theo từng phòng.
+- Đổi PIN giáo viên khi quên.
+- Sao chép cấu hình một phòng cũ để dùng cho lớp mới.
+- Hẹn giờ tự khóa phòng.
+- Chuyển quyền sở hữu phòng cho giáo viên khác.

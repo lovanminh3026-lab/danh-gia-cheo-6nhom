@@ -1,0 +1,18 @@
+ĐÁNH GIÁ SẢN PHẨM NHÓM ĐA PHÒNG
+Phiên bản: 2.1.0
+Ngày đóng gói: 09/10/2026
+
+Máy chủ: Google Apps Script + Google Sheets + Google Drive
+Giao diện: GitHub Pages
+
+Phạm vi kiểm thử:
+- Hai giáo viên đăng ký độc lập.
+- Hai phòng có số nhóm khác nhau.
+- Dữ liệu điểm không lẫn giữa hai phòng.
+- Chặn một nhóm chấm trùng cùng một nhóm.
+- Kiểm tra cú pháp Code.gs và JavaScript trong index.html.
+
+Thay đổi v2.1:
+- Chạy được từ dự án Apps Script độc lập.
+- Tự tạo Google Sheet trung tâm khi chạy setupMultiRoomSystem.
+- Ghi rõ không dán đè vào Mã.gs/BaoMatChamDiem.gs của bản cũ.
